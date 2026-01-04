@@ -5,8 +5,20 @@ import connectDB from "./db/index.js";
 // require('dotenv').config({path:`./env`});
 dotenv.config()
 
-
-connectDB();
+//DB connection 
+connectDB()
+.then(()=>{
+    app.on("error",(error)=>{
+        console.log("applicatin not able to talk to mongoose", error)
+        throw error
+    })
+    app.listen(process.env.PORT || 8000, ()=>{
+        console.log(`server is running at port${process.env.PORT}`)
+    })
+})
+.catch((err)=>{
+    console.log("database connection failed")
+})
 
 
 
