@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import jwt from "jsonwebtoken"
-import bcrypt from "bcryptjs"
-import { use } from "react"
+import bcrypt from "bcrypt"
+
 
 const userSchema = new mongoose.Schema({
     username:{
@@ -52,10 +52,9 @@ const userSchema = new mongoose.Schema({
     
 },{timestamps:true})
 
-userSchema.pre("save", async function(next){
-    if(!this.isModified("password")) return next(); // if password is not modified then we will not hash it again
+userSchema.pre("save", async function(){
+    if(!this.isModified("password")) return; // if password is not modified then we will not hash it again
     this.password = await bcrypt.hash(this.password, 10);
-    next();
 })
 
 userSchema.methods.isPasswordCorrect = async function(password){
